@@ -8,36 +8,38 @@ function HostList() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      setError(null); 
-
+      setError(null);
+  
       try {
         const response = await fetch('https://nagios.op-bit.nz/nagios4/cgi-bin/statusjson.cgi?query=hostlist&details=true', {
+          method: 'GET',
           headers: {
-            'Authorization': 'Basic ' + btoa('your_username:your_password'),
-            'Accept': 'application/json'
-          }
-        });
+            'Authorization': 'Basic ' + btoa('nagiosadmin:NVbDrRChB8d6FTbWodaZ'),
+            'Accept': 'application/json',
+          },
 
-        if (!response.ok) {
+        });
+  
+        // You cannot use response.json() with 'no-cors' mode, 
+        // and you can only access the response if the server allows it.
+        if (response.ok) {
+          const data = await response.text(); // Read as text, no body access
+          // You can try to parse this text data as needed
+          const parsedData = JSON.parse(data);
+          setHosts(parsedData.data.hostlist);
+        } else {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        // You cannot use response.json() with 'no-cors' mode
-        // You'll need to handle the response as text
-        const data = await response.text(); 
-
-        // Parse the JSON data manually
-        const parsedData = JSON.parse(data); 
-        setHosts(parsedData.data.hostlist); 
       } catch (error) {
         setError(error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchData();
-  }, []); 
+  }, []);
+  
 
   return (
     <div>
@@ -59,3 +61,8 @@ function HostList() {
 }
 
 export default HostList;
+
+
+/*
+https://nagios.op-bit.nz/nagios4/cgi-bin/statusjson.cgi?query=servicelist&details=true
+*/
