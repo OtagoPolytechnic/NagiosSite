@@ -1,11 +1,10 @@
-import Home from './components/Home.js';
-import './App.css';
+import React from 'react';
+import HostList from './components/HostList'; 
 
 function App() {
   return (
     <div className="App">
-      <h1>test</h1>
-      <Home />
+      <HostList />
     </div>
   );
 }
