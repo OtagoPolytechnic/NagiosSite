@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 import HostList from './components/HostList'; 
 
 function App() {
